@@ -11,7 +11,7 @@ public class IndexController {
     @GetMapping("/")//表示根目录 只要输入localhost:8887/就可以进入
     public String index(){
 
-        return "index";
+        return "index" ;
     }
 
 }
