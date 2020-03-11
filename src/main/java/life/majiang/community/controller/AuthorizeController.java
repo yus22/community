@@ -27,10 +27,11 @@ public class AuthorizeController {
     private String clientSecret;
     @Value("${github.redirect.uri}")
     private String redirectUri;
+
     @GetMapping("/callback")
-    public  String callback(@RequestParam(name = "code") String code,
-                            @RequestParam(name ="state") String state,
-                            HttpServletResponse response){
+    public String callback(@RequestParam(name = "code") String code,
+                           @RequestParam(name = "state") String state,
+                           HttpServletResponse response) {
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setCode(code);
         accessTokenDTO.setRedirect_uri(redirectUri);
@@ -39,21 +40,21 @@ public class AuthorizeController {
         accessTokenDTO.setClient_secret(clientSecret);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser = githubProvider.getUser(accessToken);
-       if(githubUser!=null){
-           //登录成功写cookie和session
-           User user = new User();
-           String token = UUID.randomUUID().toString();
-           user.setToken(token);
-           user.setName(githubUser.getName());
-           user.setAccountId(String.valueOf(githubUser.getId()));
-           user.setGmtCreate(System.currentTimeMillis());
-           user.setGmtModified(user.getGmtCreate());
-           userMapper.insert(user);
-           response.addCookie(new Cookie("token",token));
-           return "redirect:/";
-       }else{
-           //登录失败 重新登录
-           return "redirect:/";
+        if (githubUser != null && githubUser.getId() != null) {
+            //登录成功写cookie和session
+            User user = new User();
+            String token = UUID.randomUUID().toString();
+            user.setToken(token);
+            user.setName(githubUser.getName());
+            user.setAccountId(String.valueOf(githubUser.getId()));
+            user.setGmtCreate(System.currentTimeMillis());
+            user.setGmtModified(user.getGmtCreate());
+            userMapper.insert(user);
+            response.addCookie(new Cookie("token", token));
+            return "redirect:/";
+        } else {
+            //登录失败 重新登录
+            return "redirect:/";
         }
 
 
