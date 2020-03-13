@@ -1,10 +1,11 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>码匠社区</title>
+    <title>阿双论坛</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/community.css">
     <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
     <script src="js/bootstrap.min.js" type="application/javascript"></script>
 
@@ -14,9 +15,9 @@
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">码匠社区</span>
+                <span class="sr-only">阿双论坛</span>
             </button>
-            <a class="navbar-brand" href="#">码匠社区</a>
+            <a class="navbar-brand" href="/">阿双论坛</a>
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
@@ -46,5 +47,29 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
+<div class="container-fluid main">
+    <!--一行下面定两个div 一左一右 栅格布局,页面被分为12块-->
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <h2><span class="glyphicon glyphicon-list" aria-hidden="true"></span>发现</h2>
+            <hr>
+            <div class="media" th:each="qustion : ${questions}">
+                <div class="media-left">
+                    <a href="#">
+                        <img class="media-object img-circle" th:src="${qustion.user.avatarUrl}">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading" th:text="${qustion.title}"></h4>
+                   <span th:text="${qustion.description}"></span><br>
+                    <span class="text-desc"><span th:text="${qustion.commentCount}"></span>个回复 • <span th:text="${qustion.viewCount}"></span>次浏览 • <span th:text="${#dates.format(qustion.gmtCreate,'yyyy-MM-dd HH:mm:ss')}"></span></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <h3 style="margin-left: 27px">热门话题</h3>
+        </div>
+    </div>
+</div>
 </body>
 </html>
