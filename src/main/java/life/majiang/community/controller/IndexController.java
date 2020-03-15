@@ -1,5 +1,6 @@
 package life.majiang.community.controller;
 
+import life.majiang.community.dto.PageinationDTO;
 import life.majiang.community.dto.QuestionDto;
 import life.majiang.community.mapper.QuestionMapper;
 import life.majiang.community.mapper.UserMapper;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +32,11 @@ public class IndexController {
     private QuestionService questionService;
 
     @GetMapping("/")//表示根目录 只要输入localhost:8887/就可以进入
-    public String index(HttpServletRequest request, Model model) {
+    public String index(HttpServletRequest request,
+                        Model model,
+                        @RequestParam(name ="page",defaultValue = "1")Integer page,
+                        @RequestParam(name ="size",defaultValue = "5")Integer size
+                        ) {
 //        获取token
         Cookie[] cookies = request.getCookies();
         if (cookies != null && cookies.length != 0) {
@@ -46,8 +52,8 @@ public class IndexController {
             }
         }
         //带有question信息和用户信息 进入页面显示博客信息
-        List<QuestionDto> questionList=questionService.list();
-        model.addAttribute("questions",questionList);
+       PageinationDTO pageination=questionService.list(page,size);
+        model.addAttribute("pageination",pageination);
         return "index";
     }
 
