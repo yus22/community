@@ -24,16 +24,55 @@ public class QuestionService {
     public PageinationDTO list(Integer page, Integer size) {
         Integer totalCout=questionMapper.count();
         PageinationDTO pageinationDTO = new PageinationDTO();
-        pageinationDTO.setPagination(totalCout,page,size);
+        Integer totalPage;
+        if (totalCout % size == 0) {
+            totalPage = totalCout / size;
+        } else {
+            totalPage = totalCout / size + 1;
+        }
         if (page<1){
             page=1;
         }
-        if(page>pageinationDTO.getTotalPage()){
-            page=pageinationDTO.getTotalPage();
+        if(page>totalPage){
+            page=totalPage;
         }
+        pageinationDTO.setPagination(totalPage,page);
         //        5*(i-1)  size*(page-1)分页
         Integer offset = size * (page - 1);
         List<Question> questions = questionMapper.list(offset,size);
+        List<QuestionDto> questionDtoList = new ArrayList<>();
+        for (Question question : questions) {
+            User user = userMapper.findById(question.getCreator());
+            QuestionDto questionDto = new QuestionDto();
+            //把question这个bean复制到questionDto当中
+            BeanUtils.copyProperties(question, questionDto);
+            questionDto.setUser(user);
+            questionDtoList.add(questionDto);
+        }
+        pageinationDTO.setQuestions(questionDtoList);
+        return pageinationDTO;
+    }
+
+    public PageinationDTO listByUserId(Integer userId, Integer page, Integer size) {
+        Integer totalCout=questionMapper.countByUserId(userId);
+        PageinationDTO pageinationDTO = new PageinationDTO();
+        Integer totalPage;
+        if (totalCout % size == 0) {
+            totalPage = totalCout / size;
+        } else {
+            totalPage = totalCout / size + 1;
+        }
+        if (page<1){
+            page=1;
+        }
+        if(page>totalPage){
+            page=totalPage;
+        }
+        pageinationDTO.setPagination(totalPage,page);
+
+        //        5*(i-1)  size*(page-1)分页
+        Integer offset = size * (page - 1);
+        List<Question> questions = questionMapper.listByUserId(userId,offset,size);
         List<QuestionDto> questionDtoList = new ArrayList<>();
         for (Question question : questions) {
             User user = userMapper.findById(question.getCreator());

@@ -8,38 +8,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-public class IndexController {
-    /*
-     * 此处实现逻辑 当用户登录过一次后.会把用户信息存到数据库中,生成一个token,
-     * 将该token存到cookie上,再次登录直接从cookie上获取到该token和数据库中信息做对比,
-     * 数据库中直接存在此user用户,再将user信息存到session中,html使用
-     * */
-
+public class ProfileController {
     @Autowired
     private UserMapper userMapper;
-
     @Autowired
     private QuestionService questionService;
-
-    @GetMapping("/")//表示根目录 只要输入localhost:8887/就可以进入
-    public String index(HttpServletRequest request,
-                        Model model,
-                        @RequestParam(name ="page",defaultValue = "1")Integer page,
-                        @RequestParam(name ="size",defaultValue = "5")Integer size
-                        ) {
-//        获取token
+    @GetMapping("/profile/{action}")
+    public String profile(@PathVariable(name = "action")String action, Model model, HttpServletRequest request,@RequestParam(name ="page",defaultValue = "1")Integer page,
+                          @RequestParam(name ="size",defaultValue = "5")Integer size){
         Cookie[] cookies = request.getCookies();
+        User user=null;
         if (cookies != null && cookies.length != 0) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {
                     String token = cookie.getValue();
-                    User user = userMapper.findByToken(token);
+                    user = userMapper.findByToken(token);
                     if (user != null) {
                         request.getSession().setAttribute("user", user);
                     }
@@ -47,10 +37,19 @@ public class IndexController {
                 }
             }
         }
-        //带有question信息和用户信息 进入页面显示博客信息
-       PageinationDTO pageination=questionService.list(page,size);
-        model.addAttribute("pageination",pageination);
-        return "index";
+        if (user==null){
+            return "redirect:/";
+        }
+        if("question".equals(action)){
+            model.addAttribute("section","question");
+            model.addAttribute("sectionName","我的问题");
+        }else if("replies".equals(action)){
+            model.addAttribute("section","replies");
+            model.addAttribute("sectionName","最新回复");
+        }
+        PageinationDTO pageinationDTO = questionService.listByUserId(user.getId(), page, size);
+        model.addAttribute("pageination",pageinationDTO);
+        return "profile";
     }
-
 }
+
