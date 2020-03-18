@@ -26,7 +26,7 @@
             <div col-lg-12 col-md-12 col-xs-12 th:text="${question.description}">
             </div>
             <hr>
-            <a th:href="@{'/question/'+${question.id}}">
+            <a th:href="@{'/question/'+${question.id}}" th:if="${session.user !=null&&session.user.id==question.creator}">
                 <span class="glyphicon glyphicon-pencil community_menu" aria-hidden="true">编辑</span>
             </a>
 

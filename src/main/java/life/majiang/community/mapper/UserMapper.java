@@ -1,10 +1,7 @@
 package life.majiang.community.mapper;
 
 import life.majiang.community.model.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,4 +13,10 @@ public interface UserMapper {
     User findByToken(@Param("token") String token);//不是类就要写一个Param注解
     @Select("select * from user where id=#{id}")
     User findById(@Param("id") Integer id);
+
+    @Select("select * from user where account_id=#{accountId}")
+    User findByAccountId(@Param("accountId") String accountId);
+
+    @Update("update user set name=#{name},bio=#{bio},gmt_modified=#{gmtModified},avatar_url=#{avatarUrl},token=#{token} where id=#{id}")
+    void update(User user);
 }
