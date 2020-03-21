@@ -1,13 +1,16 @@
 package life.majiang.community.controller;
 
+import life.majiang.community.dto.QuestionDto;
 import life.majiang.community.mapper.QuestionMapper;
 import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.model.Question;
 import life.majiang.community.model.User;
+import life.majiang.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -17,8 +20,22 @@ import javax.servlet.http.HttpServletRequest;
 public class PublishController {
     @Autowired
     private UserMapper userMapper;
+
     @Autowired
-    private QuestionMapper questionMapper;
+    private QuestionService questionService;
+
+ //点击编辑时
+    @GetMapping("/publish/{id}")
+    public String edit(@PathVariable(name = "id") Integer id,  Model model){
+        QuestionDto question = questionService.getById(id);
+        model.addAttribute("title", question.getTitle());
+        model.addAttribute("tag", question.getTag());
+        model.addAttribute("description", question.getDescription());
+        model.addAttribute("id", question.getId());
+
+        return "publish";
+    }
+
 
     //get方法渲染页面,post方法为表单提交,处理请求
     @GetMapping("/publish")
@@ -33,6 +50,7 @@ public class PublishController {
             @RequestParam("title") String title,
             @RequestParam("description") String description,
             @RequestParam("tag") String tag,
+            @RequestParam("id")Integer id,
             HttpServletRequest request,
             Model model
     ) {
@@ -64,13 +82,14 @@ public class PublishController {
         Question question = new Question();
         question.setTitle(title);
         question.setDescription(description);
+        question.setId(id);
         question.setTag(tag);
         question.setCreator(user.getId());
         question.setGmtCreate(System.currentTimeMillis());
         question.setGmtModified(question.getGmtCreate());
+        //点击完发布按钮后验证是否是新问题,新增问题创建,不是新增修改question内容
+        questionService.createOrUpdate(question);
 
-        //将提交数据存到表中
-        questionMapper.create(question);
 //        成功回到首页
         return "redirect:/";
     }
