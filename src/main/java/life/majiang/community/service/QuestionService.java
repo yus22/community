@@ -2,6 +2,8 @@ package life.majiang.community.service;
 
 import life.majiang.community.dto.PageinationDTO;
 import life.majiang.community.dto.QuestionDto;
+import life.majiang.community.exception.CustomizeErrorCode;
+import life.majiang.community.exception.CustomizeException;
 import life.majiang.community.mapper.QuestionMapper;
 import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.model.Question;
@@ -98,6 +100,9 @@ public class QuestionService {
 
     public QuestionDto getById(Integer id) {
         Question question = questionMapper.selectByPrimaryKey(id);
+        if (question==null){
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDto questionDto = new QuestionDto();
         //把question放到questionDto中
         BeanUtils.copyProperties(question, questionDto);
@@ -124,7 +129,10 @@ public class QuestionService {
             QuestionExample example = new QuestionExample();
 //           给example传id
             example.createCriteria().andIdEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(updateQuestion, example);
+            int updated = questionMapper.updateByExampleSelective(updateQuestion, example);
+            if(updated!=1){
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
         }
     }
 }
