@@ -4,6 +4,7 @@ import life.majiang.community.dto.PageinationDTO;
 import life.majiang.community.dto.QuestionDto;
 import life.majiang.community.exception.CustomizeErrorCode;
 import life.majiang.community.exception.CustomizeException;
+import life.majiang.community.mapper.QuestionExtMapper;
 import life.majiang.community.mapper.QuestionMapper;
 import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.model.Question;
@@ -23,6 +24,8 @@ public class QuestionService {
     private QuestionMapper questionMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
 
     //相当于关联查question表和user表,将两个表信息bean存到questionDto中
     public PageinationDTO list(Integer page, Integer size) {
@@ -110,7 +113,7 @@ public class QuestionService {
         questionDto.setUser(user);
         return questionDto;
     }
-
+    //更新或修改问题
     public void createOrUpdate(Question question) {
 
         if (question.getId()==null){
@@ -134,5 +137,17 @@ public class QuestionService {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
         }
+    }
+
+    //增加阅读数
+    public void inView(Integer id) {
+        //获取该问题
+        Question question = new Question();
+        question.setId(id);
+        //设置步长为1
+        question.setViewCount(1);
+        questionExtMapper.incView(question);
+
+
     }
 }
