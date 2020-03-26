@@ -4,6 +4,7 @@ import life.majiang.community.enums.CommentTypeEnum;
 import life.majiang.community.exception.CustomizeErrorCode;
 import life.majiang.community.exception.CustomizeException;
 import life.majiang.community.mapper.CommentMapper;
+import life.majiang.community.mapper.QuestionExtMapper;
 import life.majiang.community.mapper.QuestionMapper;
 import life.majiang.community.model.Comment;
 import life.majiang.community.model.Question;
@@ -18,6 +19,9 @@ public class CommentService {
     @Autowired
     private QuestionMapper questionMapper;
 
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
+
     public void insert(Comment comment) {
 
         //没有选择问题或者回复,问题或者回复已经不存在
@@ -30,16 +34,23 @@ public class CommentService {
         if (comment.getType() == CommentTypeEnum.COMMENT.getType()) {
             //回复评论 先获取到父级评论
             Comment dbComment = commentMapper.selectByPrimaryKey(comment.getParentId());
-            if (dbComment == null){
+            if (dbComment == null) {
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
             commentMapper.insert(comment);
         } else {
 //        回复问题
             Question question = questionMapper.selectByPrimaryKey(comment.getParentId());
-
+            if (question == null) {
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
+            commentMapper.insert(comment);
+//            评论数增加
+            question.setCommentCount(1);
+            questionExtMapper.incCommentCount(question);
         }
 
-        commentMapper.insert(comment);
     }
 }
+
+
