@@ -1,7 +1,6 @@
 package life.majiang.community.controller;
 
 import life.majiang.community.dto.QuestionDto;
-import life.majiang.community.mapper.QuestionMapper;
 import life.majiang.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,7 +13,7 @@ public class QuestionController {
     @Autowired
     private QuestionService questionService;
     @GetMapping("/question/{id}")
-    public String question(@PathVariable(name = "id")Integer id, Model model){
+    public String question(@PathVariable(name = "id") Long id, Model model){
         QuestionDto questionDto=questionService.getById(id);
 //        累加阅读数
         questionService.inView(id);
