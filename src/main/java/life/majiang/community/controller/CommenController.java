@@ -50,8 +50,6 @@ public class CommenController {
         //评论用户设置
         comment.setCommentator(user.getId());
         commentService.insert(comment);
-
-
         return ResultDTO.okOf();
     }
 }

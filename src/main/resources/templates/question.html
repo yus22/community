@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="/css/community.css">
     <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <script src="/js/community.js" type="application/javascript"></script>
+
 
 </head>
 <body>
@@ -16,19 +18,40 @@
     <!--一行下面定两个div 一左一右 栅格布局,页面被分为12块-->
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-            <h4><span th:text="${question.title}"></span></h4>
-            <span class="text-desc">
+
+            <div class="col-lg-12 col-md-9 col-sm-12 col-xs-12">
+                <h4><span th:text="${question.title}"></span></h4>
+                <span class="text-desc">
                  作者:<span th:text="${question.user.name}"></span> |
                  发布时间:<span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd')}"></span>
                | 阅读数 :<span th:text="${question.viewCount}"></span>
             </span>
-            <hr>
-            <div col-lg-12 col-md-12 col-xs-12 th:text="${question.description}">
+                <hr>
+                <div col-lg-12 col-md-12 col-xs-12 th:text="${question.description}">
+                </div>
+                <hr>
+                <a th:href="@{'/publish/'+${question.id}}" th:if="${session.user !=null&&session.user.id==question.creator}">
+                    <span class="glyphicon glyphicon-pencil community_menu" aria-hidden="true">编辑</span>
+                </a>
             </div>
-            <hr>
-            <a th:href="@{'/publish/'+${question.id}}" th:if="${session.user !=null&&session.user.id==question.creator}">
-                <span class="glyphicon glyphicon-pencil community_menu" aria-hidden="true">编辑</span>
-            </a>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 " id="comment-section">
+                <hr>
+                <div class="media section">
+                    <div class="media-left">
+                        <a href="#">
+                            <img class="media-object img-rounded" th:src="${question.user.avatarUrl}">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h6>
+                            <a th:text="${question.user.name}" th:href="@{'/question/'+${question.id}}"></a>
+                        </h6>
+                    </div>
+                </div>
+                <input type="hidden" th:value="${question.id} " id="question-id">
+                <textarea id="comment_content" class="form-control comment" rows="6"></textarea>
+                <button type="button" class="btn btn-success btn-comment" style="float: right" onclick="post()">回复</button>
+            </div>
 
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12 ">
@@ -36,7 +59,7 @@
                 <div class="media section">
                     <div class="media-left">
                         <a href="#">
-                            <img class="media-object img-circle" th:src="${question.user.avatarUrl}">
+                            <img class="media-object img-rounded" th:src="${question.user.avatarUrl}">
                         </a>
                     </div>
                     <div class="media-body">

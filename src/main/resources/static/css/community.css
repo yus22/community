@@ -17,6 +17,7 @@ body {
     height: 38px;
 }
 
+
 .text-desc {
     font-size: 12px;
     font-weight: normal;
@@ -28,4 +29,12 @@ body {
 }
 .community_menu{
     color: #999;
+}
+/*评论样式*/
+.comment{
+    margin: 10px 0;
+}
+/*回复按钮样式*/
+.btn-comment{
+    margin-bottom: 10px;
 }

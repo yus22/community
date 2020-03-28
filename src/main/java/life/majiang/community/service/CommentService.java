@@ -10,6 +10,7 @@ import life.majiang.community.model.Comment;
 import life.majiang.community.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CommentService {
@@ -21,7 +22,7 @@ public class CommentService {
 
     @Autowired
     private QuestionExtMapper questionExtMapper;
-
+    @Transactional
     public void insert(Comment comment) {
 
         //没有选择问题或者回复,问题或者回复已经不存在

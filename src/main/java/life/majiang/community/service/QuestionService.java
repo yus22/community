@@ -29,6 +29,7 @@ public class QuestionService {
 
     //相当于关联查question表和user表,将两个表信息bean存到questionDto中
     public PageinationDTO list(Integer page, Integer size) {
+
         Integer totalCout = (int) questionMapper.countByExample(new QuestionExample());
         PageinationDTO pageinationDTO = new PageinationDTO();
         Integer totalPage;
@@ -46,6 +47,7 @@ public class QuestionService {
         pageinationDTO.setPagination(totalPage, page);
         //        5*(i-1)  size*(page-1)分页
         Integer offset = size * (page - 1);
+//        数据库分页查询
         List<Question> questions = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, size));
         List<QuestionDto> questionDtoList = new ArrayList<>();
         for (Question question : questions) {

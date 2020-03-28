@@ -31,7 +31,7 @@ public class IndexController {
                         @RequestParam(name = "page", defaultValue = "1") Integer page,
                         @RequestParam(name = "size", defaultValue = "5") Integer size
     ) {
-//        获取token
+
         //带有question信息和用户信息 进入页面显示博客信息
         PageinationDTO pageination = questionService.list(page, size);
         model.addAttribute("pageination", pageination);
