@@ -6,7 +6,8 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/css/community.css">
-    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    <script src="/js/jquery.js"></script>
+    <!--<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>-->
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
     <script src="/js/community.js" type="application/javascript"></script>
 
@@ -18,8 +19,9 @@
     <!--一行下面定两个div 一左一右 栅格布局,页面被分为12块-->
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-
+            <!--主问题-->
             <div class="col-lg-12 col-md-9 col-sm-12 col-xs-12">
+
                 <h4><span th:text="${question.title}"></span></h4>
                 <span class="text-desc">
                  作者:<span th:text="${question.user.name}"></span> |
@@ -27,19 +29,60 @@
                | 阅读数 :<span th:text="${question.viewCount}"></span>
             </span>
                 <hr>
+                <!--问题描述-->
                 <div col-lg-12 col-md-12 col-xs-12 th:text="${question.description}">
                 </div>
                 <hr>
                 <a th:href="@{'/publish/'+${question.id}}" th:if="${session.user !=null&&session.user.id==question.creator}">
                     <span class="glyphicon glyphicon-pencil community_menu" aria-hidden="true">编辑</span>
                 </a>
+                <hr>
             </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+                <!--问题回复列表-->
+                <h4>
+                    <span th:text="${question.commentCount}"></span>个回复
+                </h4>
+                <hr>
+                        <div class="section" >
+                            <div class="media-left">
+                                <a href="#">
+                                    <img class="media-object img-circle" th:src="${question.user.avatarUrl}">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <div style="margin-top: 7px"></div>
+                                <div style="display: inline-block;">
+
+                                        <a th:text="${question.user.name}" th:href="@{'/question/'+${question.id}}"></a>
+
+
+                                </div>
+                                <!--时间-->
+                                <div style="display: inline-block" class="text-desc" th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd')}"></div>
+                                <div class="text-desc pull-right" >
+                                    <!--回复-->
+                                    <span class="glyphicon glyphicon-comment"></span>
+                                    <!--点赞-->
+                                    <span class="glyphicon glyphicon-thumbs-up" style="margin-left: 10px"></span>
+                                </div>
+                                <div style="display: inline-block;margin-right: 150px " class="pull-right">
+                                        这是回复爱的方式打打分发到大沙发斯蒂芬阿法发顺丰阿发发送到发发发发第三方好结果换地方大幅12123
+                                </div>
+
+                            </div>
+
+                        </div>
+
+            </div>
+            <!--回复区-->
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 " id="comment-section">
                 <hr>
                 <div class="media section">
                     <div class="media-left">
                         <a href="#">
-                            <img class="media-object img-rounded" th:src="${question.user.avatarUrl}">
+                            <img class="media-object img-circle" th:src="${question.user.avatarUrl}">
                         </a>
                     </div>
                     <div class="media-body">
