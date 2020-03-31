@@ -33,52 +33,54 @@
                 <div col-lg-12 col-md-12 col-xs-12 th:text="${question.description}">
                 </div>
                 <hr>
-                <a th:href="@{'/publish/'+${question.id}}" th:if="${session.user !=null&&session.user.id==question.creator}">
+                <a th:href="@{'/publish/'+${question.id}}"
+                   th:if="${session.user !=null&&session.user.id==question.creator}">
                     <span class="glyphicon glyphicon-pencil community_menu" aria-hidden="true">编辑</span>
                 </a>
                 <hr>
             </div>
-
+            <!--问题回复列表-->
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
-                <!--问题回复列表-->
                 <h4>
                     <span th:text="${question.commentCount}"></span>个回复
                 </h4>
                 <hr>
-                        <div class="section" >
-                            <div class="media-left">
-                                <a href="#">
-                                    <img class="media-object img-circle" th:src="${question.user.avatarUrl}">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <div style="margin-top: 7px"></div>
-                                <div style="display: inline-block;">
-
-                                        <a th:text="${question.user.name}" th:href="@{'/question/'+${question.id}}"></a>
-
-
-                                </div>
-                                <!--时间-->
-                                <div style="display: inline-block" class="text-desc" th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd')}"></div>
-                                <div class="text-desc pull-right" >
-                                    <!--回复-->
-                                    <span class="glyphicon glyphicon-comment"></span>
-                                    <!--点赞-->
-                                    <span class="glyphicon glyphicon-thumbs-up" style="margin-left: 10px"></span>
-                                </div>
-                                <div style="display: inline-block;margin-right: 150px " class="pull-right">
-                                        这是回复爱的方式打打分发到大沙发斯蒂芬阿法发顺丰阿发发送到发发发发第三方好结果换地方大幅12123
-                                </div>
-
-                            </div>
-
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+                <div class="section" th:each="comment : ${comments}">
+                    <!--头像-->
+                    <div class="media-left">
+                        <a href="#">
+                            <img class="media-object img-circle" th:src="${comment.user.avatarUrl}">
+                        </a>
+                    </div>
+                    <div class="media-body" style="position: relative">
+                        <div style="margin-top: 7px"></div>
+                        <div style="display: inline-block;">
+                            <span th:text="${comment.user.name}"></span>
                         </div>
+                        <!--时间-->
+                        <div style="display: inline-block" class="text-desc"
+                             th:text="${#dates.format(comment.gmtCreate,'yyyy-MM-dd')}"></div>
+                        <div style="display: inline-block;margin-right: 150px " th:text="${comment.content}">
+                        </div>
+                        <div class="text-desc pull-right" style="position: absolute;right: 0;top: 7px;">
+                            <!--回复图标-->
+                            <span class="glyphicon glyphicon-comment icon"></span>
+                            <!--点赞图标-->
+                            <span class="glyphicon glyphicon-thumbs-up icon" style="margin-left: 10px"></span>
+                        </div>
+
+
+                    </div>
+                    <hr>
+
+                </div>
 
             </div>
             <!--回复区-->
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 " id="comment-section">
-                <hr>
+
                 <div class="media section">
                     <div class="media-left">
                         <a href="#">
@@ -93,7 +95,8 @@
                 </div>
                 <input type="hidden" th:value="${question.id} " id="question-id">
                 <textarea id="comment_content" class="form-control comment" rows="6"></textarea>
-                <button type="button" class="btn btn-success btn-comment" style="float: right" onclick="post()">回复</button>
+                <button type="button" class="btn btn-success btn-comment" style="float: right" onclick="post()">回复
+                </button>
             </div>
 
         </div>
@@ -109,7 +112,7 @@
                         <h5 class="media-heading">
                             <a th:text="${question.user.name}" th:href="@{'/question/'+${question.id}}"></a>
                         </h5>
-                        <p  style="color: rgb(153,153,153)" th:text="${question.user.bio}"></p>
+                        <p style="color: rgb(153,153,153)" th:text="${question.user.bio}"></p>
                     </div>
                 </div>
             </div>

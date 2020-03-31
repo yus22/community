@@ -1,10 +1,8 @@
 package life.majiang.community.controller;
 
-import life.majiang.community.dto.CommentDto;
+import life.majiang.community.dto.CommentCreateDto;
 import life.majiang.community.dto.ResultDTO;
 import life.majiang.community.exception.CustomizeErrorCode;
-import life.majiang.community.exception.CustomizeException;
-import life.majiang.community.exception.ICustomizeErrorCode;
 import life.majiang.community.mapper.CommentMapper;
 import life.majiang.community.model.Comment;
 import life.majiang.community.model.User;
@@ -17,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
 
 @Controller
 public class CommenController {
@@ -30,7 +26,7 @@ public class CommenController {
 
     @ResponseBody
     @RequestMapping(value = "/comment",method = RequestMethod.POST)
-    public Object post(@RequestBody CommentDto commentDto,
+    public Object post(@RequestBody CommentCreateDto commentCreateDto,
                        HttpServletRequest request
     ){
 //        登录状态验证
@@ -42,9 +38,9 @@ public class CommenController {
 
         Comment comment = new Comment();
         //传进来问题id
-        comment.setParentId(commentDto.getParentId());
-        comment.setContent(commentDto.getContent());
-        comment.setType(commentDto.getType());
+        comment.setParentId(commentCreateDto.getParentId());
+        comment.setContent(commentCreateDto.getContent());
+        comment.setType(commentCreateDto.getType());
         comment.setGmtModified(System.currentTimeMillis());
         comment.setGmtCreate(System.currentTimeMillis());
         //评论用户设置

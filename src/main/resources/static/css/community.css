@@ -38,3 +38,10 @@ body {
 .btn-comment{
     margin-bottom: 10px;
 }
+/*鼠标悬浮变成小手*/
+.icon{
+    cursor: pointer;
+}
+.icon:hover{
+    color:deepskyblue;
+}
