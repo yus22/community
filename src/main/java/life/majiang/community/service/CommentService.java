@@ -64,9 +64,13 @@ public class CommentService {
 
     }
 
-    public List<CommentDTO> getById(Long id) {
+    public List<CommentDTO> listByTargetId(Long id, CommentTypeEnum type) {
         CommentExample commentExample = new CommentExample();
-        commentExample.createCriteria().andParentIdEqualTo(id).andTypeEqualTo(CommentTypeEnum.QUESTION.getType());
+        commentExample.createCriteria()
+                .andParentIdEqualTo(id)
+                .andTypeEqualTo(type.getType());
+//        按创建时间倒序排序 gmt_create 数据库字段名
+        commentExample.setOrderByClause("gmt_create desc");
 //        查询通过传过来的问题的id,查找Comment中parentId为此id的问题
         List<Comment> comments = commentMapper.selectByExample(commentExample);
         if (comments.size() == 0) {

@@ -2,6 +2,7 @@ package life.majiang.community.controller;
 
 import life.majiang.community.dto.CommentDTO;
 import life.majiang.community.dto.QuestionDto;
+import life.majiang.community.enums.CommentTypeEnum;
 import life.majiang.community.service.CommentService;
 import life.majiang.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class QuestionController {
     public String question(@PathVariable(name = "id") Long id, Model model){
         QuestionDto questionDto=questionService.getById(id);
 //        获取评论列表
-        List<CommentDTO> comments=commentService.getById(id);
+        List<CommentDTO> comments=commentService.listByTargetId(id, CommentTypeEnum.QUESTION);
 
 
 //        累加阅读数

@@ -45,3 +45,10 @@ body {
 .icon:hover{
     color:deepskyblue;
 }
+.sub-comments{
+    border: 1px solid #eee;
+    margin-top: 10px;
+    border-radius: 5px;
+    padding-top: 15px;
+    margin-bottom: 15px;
+}
