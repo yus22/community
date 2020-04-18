@@ -33,6 +33,12 @@
                 <div col-lg-12 col-md-12 col-xs-12 th:text="${question.description}">
                 </div>
                 <hr>
+                <span th:each="tag : ${question.tag.split(',')}">
+                    <span class="glyphicon glyphicon-tags" aria-hidden="true" ></span>
+                    <span class="label label-info " th:text="${tag}"></span>
+                </span>
+
+                <hr>
                 <a th:href="@{'/publish/'+${question.id}}"
                    th:if="${session.user !=null&&session.user.id==question.creator}">
                     <span class="glyphicon glyphicon-pencil community_menu" aria-hidden="true">编辑</span>
@@ -67,7 +73,7 @@
                         </div>
                         <div class="text-desc pull-right" style="position: absolute;right: 0;top: 7px;">
                             <!--回复图标-->
-                            <span class="glyphicon glyphicon-comment icon" th:data-id="${comment.id}" onclick="collapseComments(this)"></span>
+                            <span class="glyphicon glyphicon-comment icon" th:data-id="${comment.id}" onclick="collapseComments(this)" th:text="${comment.commentCount}"></span>
                             <!--点赞图标-->
                             <span class="glyphicon glyphicon-thumbs-up icon" style="margin-left: 10px"></span>
                         </div>

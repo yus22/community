@@ -1,0 +1,1 @@
+alter table COMMENT add COMMENT_COUNT INT DEFAULT 0;
