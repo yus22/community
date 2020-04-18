@@ -10,13 +10,16 @@ import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.model.Question;
 import life.majiang.community.model.QuestionExample;
 import life.majiang.community.model.User;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -157,4 +160,26 @@ public class QuestionService {
 
 
     }
+
+    public List<QuestionDto> selectRelates(QuestionDto queryDto) {
+        if (StringUtils.isBlank(queryDto.getTag())){
+            return new ArrayList<>();
+        }
+        String[] tags = StringUtils.split(queryDto.getTag(), ",");
+        String regexptag = Arrays.stream(tags).collect(Collectors.joining("|"));
+        Question question = new Question();
+        question.setId(queryDto.getId());
+        question.setTag(regexptag);
+
+        List<Question> questions = questionExtMapper.selectRelated(question);
+        List<QuestionDto> questionDtos = questions.stream().map(q -> {
+            QuestionDto questionDto = new QuestionDto();
+            BeanUtils.copyProperties(q,questionDto);
+            return questionDto;
+        }).collect(Collectors.toList());
+        return questionDtos;
+
+    }
+
+
 }

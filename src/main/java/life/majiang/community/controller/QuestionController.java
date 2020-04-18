@@ -3,6 +3,7 @@ package life.majiang.community.controller;
 import life.majiang.community.dto.CommentDTO;
 import life.majiang.community.dto.QuestionDto;
 import life.majiang.community.enums.CommentTypeEnum;
+import life.majiang.community.model.Question;
 import life.majiang.community.service.CommentService;
 import life.majiang.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ public class QuestionController {
     @GetMapping("/question/{id}")
     public String question(@PathVariable(name = "id") Long id, Model model){
         QuestionDto questionDto=questionService.getById(id);
+
+        List<QuestionDto> relatedQuestions=questionService.selectRelates(questionDto);
 //        获取评论列表
         List<CommentDTO> comments=commentService.listByTargetId(id, CommentTypeEnum.QUESTION);
 
@@ -30,6 +33,7 @@ public class QuestionController {
         questionService.inView(id);
         model.addAttribute("question",questionDto);
         model.addAttribute("comments",comments);
+        model.addAttribute("relatedQuestions",relatedQuestions);
         return "question";
     }
 }
