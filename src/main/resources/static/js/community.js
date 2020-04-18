@@ -64,36 +64,62 @@ function collapseComments(e) {
     $("#comment-" + id).toggleClass("in");
     //有in 代表显示
     if ($("#comment-" + id).hasClass("in")) {
+        var subCommentContainer = $("#comment-" + id);
+
         $.getJSON("/comment/" + id, function (data) {
-            console.log(data)
+
             var items = [];
-            var commentBody=$("#comment-body-"+id);
-            console.log(data.data)
-            $.each(data.data, function (key, val) {
-                items.push("<div class=\"section\">\n" +
-                    "                                    <!--评论人头像-->\n" +
-                    "                                    <div class=\"media-left\">\n" +
-                    "                                        <a href=\"#\">\n" +
-                    "                                            <img class=\"media-object img-circle\" th:src=\"${val.user.avatarUrl}\">\n" +
-                    "                                        </a>\n" +
-                    "                                    </div>\n" +
-                    "                                    <div class=\"media-body\" style=\"position: relative\">\n" +
-                    "                                        <div style=\"margin-top: 7px\"></div>\n" +
-                    "                                        <div style=\"display: inline-block;\">\n" +
-                    "                                            <span th:text=\"${val.user.name}\"></span>\n" +
-                    "                                        </div>\n" +
-                    "                                        <!--时间-->\n" +
-                    "                                        <div style=\"display: inline-block\" class=\"text-desc\"\n" +
-                    "                                             th:text=\"${#dates.format(val.gmtCreate,'yyyy-MM-dd')}\"></div>\n" +
-                    "                                        <div style=\"display: inline-block;\" th:text=\"${val.content}\">\n" +
-                    "                                        </div>\n" +
-                    "                                    </div>\n" +
-                    "\n" +
-                    "                                    <hr>\n" +
-                    "                                </div>");
+
+            $.each(data.data.reverse(), function (index, comment) {
+                var mediaElementLeft = $("<div/>", {
+                    "class": "media-left"
+                }).append(
+                    $("<img/>", {
+                        "class": "media-object img-circle",
+                        "src": comment.user.avatarUrl,
+                    })
+                );
+
+                var userDiv = $("<div/>", {
+                    "style": "display: inline-block"
+                }).append(
+                    $("<span/>", {
+                        html: comment.user.name
+                    }))
+
+                var mediaBodyElement = $("<div/>", {
+                    "class": "media-body",
+                    "style": "position: relative"
+                }).append(
+                    userDiv
+                ).append(
+                    $("<div/>", {
+                        "class": "text-desc comment-content",
+                        "style": "display: inline-block",
+                        html:new Date(comment.gmtCreate).toLocaleDateString()
+                    })
+                ).append(
+                    $("<div/>", {
+                        "class":"comment-content",
+                        "style": "display: inline-block",
+                        html: comment.content
+                    })
+                );
+
+
+                var mediaElement = $("<div/>", {
+                    "class": "section media"
+                }).append(mediaElementLeft).append(mediaBodyElement);
+
+                var commentElement = $("<div/>", {
+                    "class": "col-lg-12 col-md-12 col-sm-12 col-xs-12",
+
+                }).append(mediaElement);
+
+                subCommentContainer.prepend(commentElement);
+
             });
 
-            commentBody.append(items);
             //
             // $( "<ul/>", {
             //     "class": "my-new-list",
