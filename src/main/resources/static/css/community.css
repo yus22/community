@@ -64,3 +64,10 @@ body {
     line-height: 21px;
     font-size: 14px;
 }
+.question-tag{
+    margin-right: 5px;
+}
+.publish-tag-tap{
+    display: none;
+    margin-top: 5px;
+}

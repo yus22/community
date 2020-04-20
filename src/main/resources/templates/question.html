@@ -33,9 +33,9 @@
                 <div col-lg-12 col-md-12 col-xs-12 th:text="${question.description}">
                 </div>
                 <hr>
-                <span th:each="tag : ${question.tag.split(',')}">
-                    <span class="glyphicon glyphicon-tags" aria-hidden="true" ></span>
-                    <span class="label label-info " th:text="${tag}"></span>
+                <span class="label label-info question-tag" th:each="tag : ${question.tag.split(',')}">
+                    <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+                    <span th:text="${tag}"></span>
                 </span>
 
                 <hr>
