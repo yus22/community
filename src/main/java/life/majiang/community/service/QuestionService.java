@@ -71,7 +71,7 @@ public class QuestionService {
 
 
         QuestionExample example = new QuestionExample();
-        example.createCriteria().andIdEqualTo(userId);
+        example.createCriteria().andCreatorEqualTo(userId);
         //由于此处需要userId查询,所以就给example传一个userId
         Integer totalCout = (int) questionMapper.countByExample(example);
         PageinationDTO pageinationDTO = new PageinationDTO();
@@ -93,7 +93,7 @@ public class QuestionService {
         Integer offset = size * (page - 1);
 
         QuestionExample example1 = new QuestionExample();
-        example1.createCriteria().andIdEqualTo(userId);
+        example1.createCriteria().andCreatorEqualTo(userId);
         List<Question> questions = questionMapper.selectByExampleWithRowbounds(example1, new RowBounds(offset, size));
         List<QuestionDto> questionDtoList = new ArrayList<>();
         for (Question question : questions) {

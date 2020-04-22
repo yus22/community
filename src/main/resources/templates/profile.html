@@ -19,17 +19,20 @@
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <h2><span th:text="${sectionName}"></span></h2>
             <hr>
-            <div class="media" th:each="qustion : ${pageination.questions}">
+            <div class="media" th:each="question : ${pageination.questions}">
                 <div class="media-left">
                     <a href="#">
-                        <img class="media-object img-circle" th:src="${qustion.user.avatarUrl}">
+                        <img class="media-object img-circle" th:src="${question.user.avatarUrl}">
                     </a>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading" th:text="${qustion.title}"></h4>
-                    <span class="text-desc"><span th:text="${qustion.commentCount}"></span>个回复 • <span
-                            th:text="${qustion.viewCount}"></span>次浏览 • <span
-                            th:text="${#dates.format(qustion.gmtCreate,'yyyy-MM-dd HH:mm:ss')}"></span></span>
+                    <h4 class="media-heading">
+                        <a th:text="${question.title}" th:href="@{'/question/'+${question.id}}"></a>
+                    </h4>
+                    <span th:text="${question.description}"></span><br>
+                    <span class="text-desc"><span th:text="${question.commentCount}"></span>个回复 • <span
+                            th:text="${question.viewCount}"></span>次浏览 • <span
+                            th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm:ss')}"></span></span>
                 </div>
             </div>
             <nav aria-label="Page navigation">

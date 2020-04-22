@@ -147,4 +147,6 @@ function selectTag(e) {
 
 function showSelectTag() {
   $("#select-tag").show();
+  $("#select-tag-ul li:first-child").addClass('active');
+  $("#select-tag-ul").next().children(':first').addClass('active');
 }

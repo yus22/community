@@ -71,3 +71,9 @@ body {
     display: none;
     margin-top: 5px;
 }
+.publish-tag-tap .label-info{
+    white-space: normal;
+    display: inline-block;
+    margin: 5px 5px;
+
+}
