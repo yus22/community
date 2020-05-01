@@ -49,7 +49,7 @@ public class CommenController {
         comment.setGmtCreate(System.currentTimeMillis());
         //评论用户设置
         comment.setCommentator(user.getId());
-        commentService.insert(comment);
+        commentService.insert(comment,user);
         return ResultDTO.okOf();
     }
 

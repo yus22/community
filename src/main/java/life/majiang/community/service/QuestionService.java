@@ -34,7 +34,7 @@ public class QuestionService {
     public PageinationDTO list(Integer page, Integer size) {
 
         Integer totalCout = (int) questionMapper.countByExample(new QuestionExample());
-        PageinationDTO pageinationDTO = new PageinationDTO();
+        PageinationDTO<QuestionDto> pageinationDTO = new PageinationDTO<>();
         Integer totalPage;
         if (totalCout % size == 0) {
             totalPage = totalCout / size;
@@ -63,7 +63,7 @@ public class QuestionService {
             questionDto.setUser(user);
             questionDtoList.add(questionDto);
         }
-        pageinationDTO.setQuestions(questionDtoList);
+        pageinationDTO.setData(questionDtoList);
         return pageinationDTO;
     }
 
@@ -74,7 +74,7 @@ public class QuestionService {
         example.createCriteria().andCreatorEqualTo(userId);
         //由于此处需要userId查询,所以就给example传一个userId
         Integer totalCout = (int) questionMapper.countByExample(example);
-        PageinationDTO pageinationDTO = new PageinationDTO();
+        PageinationDTO<QuestionDto> pageinationDTO = new PageinationDTO<>();
         Integer totalPage;
         if (totalCout % size == 0) {
             totalPage = totalCout / size;
@@ -104,7 +104,7 @@ public class QuestionService {
             questionDto.setUser(user);
             questionDtoList.add(questionDto);
         }
-        pageinationDTO.setQuestions(questionDtoList);
+        pageinationDTO.setData(questionDtoList);
         return pageinationDTO;
     }
 

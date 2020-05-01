@@ -8,8 +8,8 @@ import java.util.List;
 
 @Data
 //包括页面所有对象
-public class PageinationDTO {
-    private List<QuestionDto> questions;
+public class PageinationDTO<T> {
+    private List<T> data;
     private boolean showPrevious;
     private boolean showFirstPage;
     private boolean showNext;
