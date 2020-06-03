@@ -29,12 +29,14 @@ public class IndexController {
     public String index(HttpServletRequest request,
                         Model model,
                         @RequestParam(name = "page", defaultValue = "1") Integer page,
-                        @RequestParam(name = "size", defaultValue = "5") Integer size
+                        @RequestParam(name = "size", defaultValue = "5") Integer size,
+                        @RequestParam(name = "search", required = false) String search
     ) {
 
         //带有question信息和用户信息 进入页面显示博客信息
-        PageinationDTO pageination = questionService.list(page, size);
+        PageinationDTO pageination = questionService.list(search, page, size);
         model.addAttribute("pageination", pageination);
+        model.addAttribute("search",search);
         return "index";
     }
 

@@ -2,6 +2,7 @@ package life.majiang.community.service;
 
 import life.majiang.community.dto.PageinationDTO;
 import life.majiang.community.dto.QuestionDto;
+import life.majiang.community.dto.QuestionQueryDTO;
 import life.majiang.community.exception.CustomizeErrorCode;
 import life.majiang.community.exception.CustomizeException;
 import life.majiang.community.mapper.QuestionExtMapper;
@@ -31,9 +32,14 @@ public class QuestionService {
     private QuestionExtMapper questionExtMapper;
 
     //相当于关联查question表和user表,将两个表信息bean存到questionDto中
-    public PageinationDTO list(Integer page, Integer size) {
-
-        Integer totalCout = (int) questionMapper.countByExample(new QuestionExample());
+    public PageinationDTO list(String search,Integer page, Integer size) {
+        if (StringUtils.isNotBlank(search)){
+            String[] tags = StringUtils.split(search, " ");
+            search = Arrays.stream(tags).collect(Collectors.joining("|"));
+        }
+        QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
+        questionQueryDTO.setSearch(search);
+        Integer totalCout = questionExtMapper.countBySearch(questionQueryDTO);
         PageinationDTO<QuestionDto> pageinationDTO = new PageinationDTO<>();
         Integer totalPage;
         if (totalCout % size == 0) {
@@ -53,7 +59,9 @@ public class QuestionService {
 //        数据库分页查询
         QuestionExample questionExample = new QuestionExample();
         questionExample.setOrderByClause("gmt_create desc");
-        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, size));
+        questionQueryDTO.setSize(size);
+        questionQueryDTO.setPage(offset);
+        List<Question> questions = questionExtMapper.selectBySearch(questionQueryDTO);
         List<QuestionDto> questionDtoList = new ArrayList<>();
         for (Question question : questions) {
             User user = userMapper.selectByPrimaryKey(question.getCreator());

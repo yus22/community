@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>码匠社区</title>
+    <title>菜鸟问答</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
@@ -38,7 +38,7 @@
                     <h4 class="media-heading">
                         <a th:text="${question.title}" th:href="@{'/question/'+${question.id}}"></a>
                     </h4>
-                    <span th:text="${question.description}"></span><br>
+                    <span th:text="${#strings.abbreviate(question.description,25)}"></span><br>
                     <span class="text-desc"><span th:text="${question.commentCount}"></span>个回复 • <span
                             th:text="${question.viewCount}"></span>次浏览 • <span
                             th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm:ss')}"></span></span>
@@ -47,12 +47,12 @@
             <nav aria-label="Page navigation">
                 <ul class="pagination">
                     <li th:if="${pageination.showFirstPage}">
-                        <a href="/?page=1" aria-label="Previous">
+                        <a th:href="@{/(page=1,search=${search})}" aria-label="Previous">
                             <span aria-hidden="true">&lt;&lt;</span>
                         </a>
                     </li>
                     <li th:if="${pageination.showPrevious}">
-                        <a th:href="@{/(page=${pageination.page-1})}" aria-label="Previous">
+                        <a th:href="@{/(page=${pageination.page-1},search=${search})}" aria-label="Previous">
                             <span aria-hidden="true">&lt;</span>
                         </a>
                     </li>
@@ -60,16 +60,16 @@
                     <!--这种循换是循环挂载元素,就是会生成多个li-->
                     <li th:each="page : ${pageination.pages}" th:class="${page==pageination.page}? 'active' : ''">
                         <!--选中某页高亮显示,连接跳转为/page=?-->
-                        <a th:text="${page}" th:href="@{/(page=${page})}"></a>
+                        <a th:text="${page}" th:href="@{/(page=${page},search=${search})}"></a>
                     </li>
 
                     <li th:if="${pageination.showNext}">
-                        <a th:href="@{/(page=${pageination.page+1})}" aria-label="Previous">
+                        <a th:href="@{/(page=${pageination.page+1},search=${search})}" aria-label="Previous">
                             <span aria-hidden="true">&gt;</span>
                         </a>
                     </li>
                     <li th:if="${pageination.showEndPage}">
-                        <a th:href="@{/(page=${pageination.totalPage})}" aria-label="Previous">
+                        <a th:href="@{/(page=${pageination.totalPage},search=${search})}" aria-label="Previous">
                             <span aria-hidden="true">&gt;&gt;</span>
                         </a>
                     </li>
@@ -82,5 +82,6 @@
         </div>
     </div>
 </div>
+<div th:insert="~{footer :: foot}"></div>
 </body>
 </html>
