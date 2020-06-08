@@ -3,6 +3,7 @@ package life.majiang.community.advice;
 import life.majiang.community.dto.ResultDTO;
 import life.majiang.community.exception.CustomizeErrorCode;
 import life.majiang.community.exception.CustomizeException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 /*异常处理 拦截Controller异常*/
 @ControllerAdvice
 @ResponseBody
+@Slf4j
 public class CustmoizeExceptionHandler {
 
 //   ModelAndView 就是跳转到html页面用的
@@ -26,6 +28,7 @@ public class CustmoizeExceptionHandler {
             if (ex instanceof CustomizeException){
                 return ResultDTO.errorOf((CustomizeException)ex);
             }else{
+                log.error("handle error", ex);
                 return ResultDTO.errorOf(CustomizeErrorCode.SYSTERM_ERROR);
             }
 
@@ -35,6 +38,7 @@ public class CustmoizeExceptionHandler {
             if (ex instanceof CustomizeException){
                 model.addAttribute("message",ex.getMessage());
             }else{
+                log.error("handle error", ex);
                 model.addAttribute("message",CustomizeErrorCode.SYSTERM_ERROR.getMessage());
             }
 

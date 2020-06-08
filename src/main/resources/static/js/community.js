@@ -43,7 +43,7 @@ function comment2target(targetId, type, content) {
                     var isAccepted = confirm(response.message);
 
                     if (isAccepted) {
-                        window.open("https://github.com/login/oauth/authorize?client_id=da4fbb10f58d1fc7e7c5&redirect_uri=http://localhost:8887/callback&scope=user&state=1");
+                        window.open("https://github.com/login/oauth/authorize?client_id=da4fbb10f58d1fc7e7c5&redirect_uri="+document.location.origin+"callback&scope=user&state=1");
                         window.localStorage.setItem("closable", true);
                     }
 

@@ -53,8 +53,8 @@ public class AuthorizeController {
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setBio(githubUser.getBio());
-
             user.setAvatarUrl(githubUser.getAvatar_url());
+            log.info("user message",user);
             //修复相同用户每次登录都在表里创新新用户的bug
             userService.createOrUpdate(user);
             response.addCookie(new Cookie("token", token));
